@@ -71,6 +71,10 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
             UserDetails userDetails = (UserDetails) obj;
             String token = tokenAuthenticationHandler.generateToken(JSONObject.toJSONString(userDetails));
             res.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + token);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("access_token",token);
+            res.addHeader("Content-Type","application/json;charset=UTF-8");
+            res.getWriter().write(jsonObject.toJSONString());
             //todo 将最新生成的token保存在redis或是数据库中，可以在JWTAuthenticationFilter中判断提交上来的token和当前数据库中的token是否一致
             //todo ，如果不一致则说明客户端没有使用最新的token
 
